@@ -277,8 +277,8 @@ const decline = () => {
 }
 const declineAll = () => {
   setCookies({
-    isConsentGiven: false,
-    cookiesOptionalEnabled: [],
+    isConsentGiven: true,
+    cookiesOptionalEnabled: moduleOptions.cookies.necessary,
   })
 }
 const getDescription = (description: Translatable) =>
