@@ -4,7 +4,7 @@ export default defineNuxtConfig({
       title: 'Playground',
     },
   },
-  modules: ['@dargmuesli/nuxt-cookie-control'],
+  modules: ['@snale/nuxt-cookie-control'],
   typescript: {
     includeWorkspace: true,
   },

@@ -15,11 +15,7 @@
             </div>
             <div class="cookieControl__BarButtons">
               <button @click="accept()" v-text="localeStrings?.accept" />
-              <button
-                v-if="moduleOptions.isAcceptNecessaryButtonEnabled"
-                @click="decline()"
-                v-text="localeStrings?.decline"
-              />
+              <button @click="decline()" v-text="localeStrings?.declineAll" />
               <button
                 @click="isModalActive = true"
                 v-text="localeStrings?.manageCookies"
@@ -174,7 +170,7 @@
                   v-if="!moduleOptions.isModalForced"
                   @click="
                     () => {
-                      declineAll()
+                      decline()
                       isModalActive = false
                     }
                   "
@@ -190,14 +186,9 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onBeforeMount, watch } from 'vue'
+import { computed, onBeforeMount, ref, watch } from 'vue'
 
-import {
-  type Cookie,
-  CookieType,
-  type Locale,
-  type Translatable,
-} from '../types'
+import { type Cookie, type Locale, type Translatable } from '../types'
 import {
   getAllCookieIdsString,
   getCookieId,
@@ -207,13 +198,14 @@ import {
 } from '../methods'
 
 import setCssVariables from '#cookie-control/set-vars'
-import { useCookieControl, useCookie, useNuxtApp } from '#imports'
+import { useCookie, useCookieControl, useNuxtApp } from '#imports'
 
 export interface Props {
   locale?: Locale
 }
+
 const props = withDefaults(defineProps<Props>(), {
-  locale: 'en',
+  locale: 'fr',
 })
 
 const {
@@ -255,7 +247,10 @@ const localeStrings = computed(() => moduleOptions.localeTexts[props.locale])
 const accept = () => {
   setCookies({
     isConsentGiven: true,
-    cookiesOptionalEnabled: moduleOptions.cookies.optional,
+    cookiesOptionalEnabled: [
+      ...moduleOptions.cookies.necessary,
+      ...moduleOptions.cookies.optional,
+    ],
   })
 }
 const acceptPartial = () => {
@@ -270,12 +265,6 @@ const acceptPartial = () => {
   })
 }
 const decline = () => {
-  setCookies({
-    isConsentGiven: true,
-    cookiesOptionalEnabled: moduleOptions.cookies.necessary,
-  })
-}
-const declineAll = () => {
   setCookies({
     isConsentGiven: true,
     cookiesOptionalEnabled: moduleOptions.cookies.necessary,
@@ -308,12 +297,11 @@ const setCookies = ({
   isConsentGiven.value = isConsentGivenNew // must come before an update to `cookiesEnabled`
   cookiesEnabled.value = isConsentGivenNew
     ? [
-        ...moduleOptions.cookies.necessary,
         ...moduleOptions.cookies.optional.filter((cookieOptional: Cookie) =>
           cookiesOptionalEnabledNew.includes(cookieOptional),
         ),
       ]
-    : []
+    : [...moduleOptions.cookies.necessary]
   cookiesEnabledIds.value = isConsentGivenNew
     ? getCookieIds(cookiesEnabled.value)
     : []

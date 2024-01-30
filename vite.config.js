@@ -4,7 +4,7 @@ import { defineConfig } from 'vite'
 export default defineConfig({
   resolve: {
     alias: {
-      '@dargmuesli/nuxt-cookie-control': fileURLToPath(
+      '@snale/nuxt-cookie-control': fileURLToPath(
         new URL('./src/module', import.meta.url),
       ),
     },

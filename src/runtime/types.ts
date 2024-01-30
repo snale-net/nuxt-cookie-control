@@ -2,6 +2,7 @@ import type { Ref } from 'vue'
 import type { CookieOptions } from 'nuxt/app'
 
 import en from './locale/en'
+import fr from './locale/fr'
 
 export type Locale =
   | 'ar'
@@ -136,7 +137,7 @@ export const DEFAULTS: Required<ModuleOptions> = {
     necessary: [],
     optional: [],
   },
-  cookieExpiryOffsetMs: 1000 * 60 * 60 * 24 * 365, // one year
+  cookieExpiryOffsetMs: 1000 * 60 * 60 * 24 * 182, // 6 months
   cookieNameIsConsentGiven: 'ncc_c',
   cookieNameCookiesEnabledIds: 'ncc_e',
   cookieOptions: {
@@ -150,8 +151,8 @@ export const DEFAULTS: Required<ModuleOptions> = {
   isDashInDescriptionEnabled: true,
   isIframeBlocked: false,
   isModalForced: false,
-  locales: ['en'],
-  localeTexts: { en },
+  locales: ['fr', 'en'],
+  localeTexts: { fr, en },
 }
 
 export interface State {
